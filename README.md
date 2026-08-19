@@ -84,6 +84,10 @@ Round End & Resetting:
 
  • Budget-Friendly Engineering: Built entirely out of spare Arduino starter kit components and a simple cardboard box to prove that engaging game props don't require expensive commercial gear.
 
+ ## Wiring & Connections:
+
+ Below is a visual schematic of the wiring for the Project-C4
+
  
 
   
