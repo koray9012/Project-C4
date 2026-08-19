@@ -1,0 +1,285 @@
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+#include <Keypad.h>
+
+// --- SETTINGS ---
+const char* PASSWORD = "7355608";
+const int COUNTDOWN_SECONDS = 45; 
+const int RESET_HOLD_TIME = 4000; 
+const int ERROR_COOLDOWN_MS = 700; // 0.7 second error delay
+const int BUZZER_PIN = 10;
+const int LED_PIN = 12; 
+const int BEEP_PITCH = 2500; // 2500 Hz: Maximum physical volume for passive buzzers
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);  
+
+const byte ROWS = 4; 
+const byte COLS = 3; 
+char keys[ROWS][COLS] = {
+  {'1','2','3'},
+  {'4','5','6'},
+  {'7','8','9'},
+  {'*','0','#'}
+};
+byte rowPins[ROWS] = {9, 8, 7, 6}; 
+byte colPins[COLS] = {5, 4, 3}; 
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+// --- STATE ---
+String inputCode = "";
+String targetDefuseCode = "";
+int secretDigit = 0;
+
+bool isArmed = false;
+bool isDefused = false;
+bool isGameOver = false; 
+bool isDefuseInputMode = false;
+bool isErrorActive = false;
+
+unsigned long bombStartTime;
+unsigned long resetStartTime = 0;
+unsigned long errorStartTime = 0;
+bool isResetting = false;
+
+unsigned long lastBeepTime = 0;
+unsigned long lastLedTime = 0;
+bool ledState = LOW;
+
+void setup() {
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  
+  // NOISE FILTER: Ignores electrical noise spikes shorter than 50ms on keypad pins
+  keypad.setDebounceTime(50); 
+  
+  // Seed randomness using floating analog pin
+  randomSeed(analogRead(A0));
+  
+  lcd.init();
+  lcd.backlight();
+  resetSystem();
+}
+
+void loop() {
+  if (isGameOver) {
+    checkForKeypadReset();
+  } else if (isArmed && !isDefused) {
+    runCountdown();
+    handleErrorState();
+    handleDefuseInput();
+  } else if (!isArmed) {
+    handleArming();
+  }
+}
+
+// --- RESET LOGIC ---
+void checkForKeypadReset() {
+  keypad.getKeys();
+  bool starIsPressed = false;
+
+  for (int i = 0; i < 10; i++) { 
+    if (keypad.key[i].kchar == '*' && (keypad.key[i].kstate == HOLD || keypad.key[i].kstate == PRESSED)) {
+      starIsPressed = true;
+    }
+  }
+
+  if (starIsPressed) {
+    if (!isResetting) {
+      isResetting = true;
+      resetStartTime = millis();
+    }
+    if (millis() - resetStartTime >= RESET_HOLD_TIME) {
+      isGameOver = false;
+      isArmed = false;
+      isDefused = false;
+      isResetting = false;
+      resetSystem(); 
+    }
+  } else {
+    isResetting = false;
+  }
+}
+
+// --- SOUNDS ---
+void triggerErrorSound() {
+  tone(BUZZER_PIN, 150, 300); // Non-blocking low buzz
+  digitalWrite(LED_PIN, HIGH);
+}
+
+// --- ARMING ---
+void handleArming() {
+  char key = keypad.getKey();
+  if (key) {
+    tone(BUZZER_PIN, 3500, 30); 
+    if (key == '#') {
+      if (inputCode == PASSWORD) {
+        isArmed = true;
+        secretDigit = random(0, 10);
+        targetDefuseCode = String(PASSWORD) + String(secretDigit);
+        
+        bombStartTime = millis();
+        inputCode = "";
+        isDefuseInputMode = false;
+        isErrorActive = false;
+        
+        lcd.clear();
+        lcd.print("BOMB ACTIVE");
+      } else {
+        triggerErrorSound();
+        resetSystem();
+      }
+    } else if (key == '*') {
+      inputCode = "";
+      updateLCD("Enter Code:", "");
+    } else {
+      inputCode += key;
+      updateLCD("Enter Code:", inputCode);
+    }
+  }
+}
+
+// --- ERROR STATE MANAGEMENT ---
+void handleErrorState() {
+  if (isErrorActive) {
+    if (millis() - errorStartTime >= ERROR_COOLDOWN_MS) {
+      isErrorActive = false;
+      digitalWrite(LED_PIN, LOW);
+    }
+  }
+}
+
+// --- DEFUSING ---
+void handleDefuseInput() {
+  // Lock keypad input during 0.7s error cooldown
+  if (isErrorActive) return;
+
+  char key = keypad.getKey();
+  if (key) {
+    tone(BUZZER_PIN, 3500, 30);
+    
+    if (key == '#') {
+      if (!isDefuseInputMode) {
+        isDefuseInputMode = true;
+        inputCode = "";
+      } else {
+        verifyDefuseCode();
+      }
+    } else if (key == '*') {
+      inputCode = "";
+    } else {
+      if (!isDefuseInputMode) {
+        isDefuseInputMode = true;
+        inputCode = "";
+      }
+      inputCode += key;
+      
+      // Auto-check once 8 digits are entered (7355608 + X)
+      if (inputCode.length() == 8) {
+        verifyDefuseCode();
+      }
+    }
+  }
+}
+
+void verifyDefuseCode() {
+  if (inputCode == targetDefuseCode) {
+    bombDefused();
+  } else {
+    triggerErrorSound();
+    isErrorActive = true;
+    errorStartTime = millis();
+    inputCode = ""; // Clear input for next attempt
+  }
+}
+
+void runCountdown() {
+  unsigned long currentTime = millis();
+  long timeLeftMS = (COUNTDOWN_SECONDS * 1000L) - (currentTime - bombStartTime);
+  if (timeLeftMS <= 0) { explode(); return; }
+
+  static unsigned long lastLCD = 0;
+  if (currentTime - lastLCD > 100) {
+    // LINE 1: Status / Defuse Entry / Error Display
+    lcd.setCursor(0, 0);
+    if (isErrorActive) {
+      lcd.print("INCORRECT CODE! ");
+    } else if (isDefuseInputMode) {
+      lcd.print("DEF: ");
+      lcd.print(inputCode);
+      // Pad spaces to clear LCD trailing artifacts
+      for(int i = inputCode.length(); i < 11; i++) lcd.print(" ");
+    } else {
+      lcd.print("BOMB ACTIVE     ");
+    }
+
+    // LINE 2: Continuous Timer Display
+    lcd.setCursor(0, 1);
+    lcd.print("Time: "); lcd.print(timeLeftMS / 1000);
+    lcd.print("."); lcd.print((timeLeftMS % 1000) / 100); lcd.print("s ");
+    
+    lastLCD = currentTime;
+  }
+
+  // Flash LED during normal countdown (overridden high during error)
+  if (!isErrorActive && currentTime - lastLedTime > 700) {
+    ledState = !ledState;
+    digitalWrite(LED_PIN, ledState);
+    lastLedTime = currentTime;
+  }
+
+  // --- CS2 BEEP FORMULA ---
+  float ratio = (float)timeLeftMS / (COUNTDOWN_SECONDS * 1000.0);
+  int beepGap = 100 + (900 * (ratio * ratio)); 
+
+  if (currentTime - lastBeepTime >= beepGap) {
+    tone(BUZZER_PIN, BEEP_PITCH, 70); 
+    lastBeepTime = currentTime;
+  }
+}
+
+void bombDefused() {
+  isDefused = true;
+  isGameOver = true;
+  noTone(BUZZER_PIN);
+  lcd.clear();
+  lcd.setCursor(0, 0); lcd.print("BOMB DEFUSED");
+  lcd.setCursor(0, 1); lcd.print("CT WIN - HOLD *");
+  
+  tone(BUZZER_PIN, 600, 200); delay(250);
+  tone(BUZZER_PIN, 900, 500); delay(600);
+}
+
+void explode() {
+  isArmed = false;
+  isGameOver = true;
+  lcd.clear();
+  lcd.setCursor(0,0); lcd.print(" BOOM!");
+  lcd.setCursor(0,1); lcd.print("T WIN - HOLD *");
+  
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(LED_PIN, HIGH); 
+    tone(BUZZER_PIN, 100, 600); 
+    delay(600);
+    digitalWrite(LED_PIN, LOW); 
+    delay(300);
+  }
+}
+
+void resetSystem() {
+  inputCode = "";
+  isDefuseInputMode = false;
+  isErrorActive = false;
+  updateLCD("Enter Code:", "");
+  digitalWrite(LED_PIN, LOW);
+  
+  for (int i = 0; i < 3; i++) {
+    tone(BUZZER_PIN, 4000, 50);
+    delay(100);
+  }
+}
+
+void updateLCD(String l1, String l2) {
+  lcd.clear();
+  lcd.setCursor(0, 0); lcd.print(l1);
+  lcd.setCursor(0, 1); lcd.print(l2);
+}
