@@ -112,7 +112,18 @@ Round End & Resetting:
 | **Gnd** | Buzzer | GND |
 
 ## Code:
-The code can be found in repo:
+The code can be found in repo: Project-C4 code
+
+## Bill Of Materials:
+
+| Item | Quantity | Price (USD) | Link |
+| :--- | :--- | :--- | :--- |
+| Arduino Uno R3 | 1 | 4.44 USD | https://elimex.bg/product/71201-kit-k2014-razvoyna-platka-s-atmega328p-smd-usb-b |
+| LCD Display | 1 | 22.02 USD | https://elimex.bg/product/94768-lcd-rc1602e-biy-esx |
+| Buzzer | 1 | 0.30 USD | https://elimex.bg/product/81601-zumer-0152-12v-pasiven |
+| 4x3 Button Matrix | 1 | 22.02 USD | https://elimex.bg/product/74899-kit-k2143-matrichna-klaviatura-4h4-s-16-butona-panelen-tip (my store has stopped selling the 4x3 so im gonna put the 4x4 here) || Buzzer | 1 | 0.30 USD | https://elimex.bg/product/81601-zumer-0152-12v-pasiven |
+
+
 
 
  
