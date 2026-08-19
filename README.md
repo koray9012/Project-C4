@@ -74,6 +74,18 @@ Round End & Resetting:
 
   • After a defusal or explosion, press and hold the * key for 4 seconds to reset the prop for the next round.
 
+## why i made it:
+
+ • Level Up Airsoft Matches: Standard airsoft games can get repetitive with simple flag-capturing; adding a physical CS2 bomb prop brings intense objective-based gameplay and real time pressure to every round.
+
+ • Tackle a Coding Challenge: The original setup was too basic (just holding down # to defuse), so I wanted to re-engineer the software to create a custom trial-and-error defusal mechanic and clean up state management.
+
+ • Bring CS2 to Life: As a fan of Counter-Strike, replicating the authentic arming sequence, explosive exponential beep timing, and high-stakes feel on real hardware was a fun DIY project.
+
+ • Budget-Friendly Engineering: Built entirely out of spare Arduino starter kit components and a simple cardboard box to prove that engaging game props don't require expensive commercial gear.
+
+ 
+
   
 
     
