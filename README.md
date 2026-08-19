@@ -87,6 +87,7 @@ Round End & Resetting:
  ## Wiring & Connections:
 
  Below is a visual schematic of the wiring for the Project-C4
+![image alt](https://github.com/koray9012/Project-C4/blob/main/%D0%95%D0%BA%D1%80%D0%B0%D0%BD%D0%BD%D0%B0%20%D1%81%D0%BD%D0%B8%D0%BC%D0%BA%D0%B0%202026-08-19%20182526.png?raw=true)
 
  
 
