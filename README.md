@@ -92,26 +92,28 @@ Round End & Resetting:
 
 ### Pinout breakdown:
 
-| ESP32 Pin | Component | Connected Pin / Note |
+| Arduino Pin | Component | Connected Pin / Note |
 | :--- | :--- | :--- |
-| **GPIO 14** | L298N Motor Driver | ENA+ENB (PWM Speed Control) |
-| **GPIO 27** | L298N Motor Driver | IN1 (Right Motor) |
-| **GPIO 26** | L298N Motor Driver | IN2 (Right Motor) |
-| **GPIO 25** | L298N Motor Driver | IN3 (Left Motor) |
-| **GPIO 33** | L298N Motor Driver | IN4 (Left Motor) |
-| **GPIO 17** | Left VL53L0X Laser | XSHUT  |
-| **GPIO 18** | Right VL53L0X Laser | XSHUT |
-| **GPIO 21** | OLED + Both Lasers | Shared I2C SDA |
-| **GPIO 22** | OLED + Both Lasers | Shared I2C SCL |
-| **GPIO 4** | Mode Pushbutton | Button Pin (other pin to GND) |
-| **GPIO 19** | Active Buzzer | Buzzer (+) Positive (other pin GND) |
-| **5V** | L298N Motor Driver| 5V screw for esp32 power |
-| **Battery +** | power switch -> L298N Motor Driver | 12V screw for motor power |
-| **Battery -** | Shared GND of all devices | Shared GND cable |
-| **Motor R1** | L298N Motor Driver | + to OUT1 - to OUT2 |
-| **Motor R2** | L298N Motor Driver | + to OUT1 - to OUT2 |
-| **Motor L1** | L298N Motor Driver | + to OUT4 - to OUT3 |
-| **Motor L2** | L298N Motor Driver | + to OUT4 - to OUT3 |
+| **SDA/A4** | LCD Display Driver | SDA |
+| **SCL/A5** | LCD Display Driver | SCL |
+| **Pin 9** | Button Matrix | Row 1 (1,2,3) |
+| **Pin 8** | Button Matrix | Row 2 (4,5,6) |
+| **Pin 7** | Button Matrix | Row 3 (7,8,9) |
+| **Pin 6** | Button Matrix | Row 4 (*,0,#) |
+| **Pin 5** | Button Matrix | Col 1 (1,4,7,*) |
+| **Pin 4** | Button Matrix | Col 2 (2,5,8,0) |
+| **Pin 3** | Button Matrix | Col 3 (3,6,9,#) |
+| **9V Battery +** | switch | Pin 1 |
+| **Switch Pin 2** | Arduino | 12V jack |
+| **9V Battery -** | Arduino | 12V jack |
+| **VCC** | LCD Display Driver | 5V |
+| **GND** | LCD Display Driver | GND |
+| **Pin 10** | Buzzer | + (with 110ohm resistor) |
+| **Gnd** | Buzzer | GND |
+
+## Code:
+The code can be found in repo:
+
 
  
 
