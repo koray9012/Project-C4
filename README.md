@@ -87,7 +87,31 @@ Round End & Resetting:
  ## Wiring & Connections:
 
  Below is a visual schematic of the wiring for the Project-C4
+
 ![image alt](https://github.com/koray9012/Project-C4/blob/main/%D0%95%D0%BA%D1%80%D0%B0%D0%BD%D0%BD%D0%B0%20%D1%81%D0%BD%D0%B8%D0%BC%D0%BA%D0%B0%202026-08-19%20182526.png?raw=true)
+
+### Pinout breakdown:
+
+| ESP32 Pin | Component | Connected Pin / Note |
+| :--- | :--- | :--- |
+| **GPIO 14** | L298N Motor Driver | ENA+ENB (PWM Speed Control) |
+| **GPIO 27** | L298N Motor Driver | IN1 (Right Motor) |
+| **GPIO 26** | L298N Motor Driver | IN2 (Right Motor) |
+| **GPIO 25** | L298N Motor Driver | IN3 (Left Motor) |
+| **GPIO 33** | L298N Motor Driver | IN4 (Left Motor) |
+| **GPIO 17** | Left VL53L0X Laser | XSHUT  |
+| **GPIO 18** | Right VL53L0X Laser | XSHUT |
+| **GPIO 21** | OLED + Both Lasers | Shared I2C SDA |
+| **GPIO 22** | OLED + Both Lasers | Shared I2C SCL |
+| **GPIO 4** | Mode Pushbutton | Button Pin (other pin to GND) |
+| **GPIO 19** | Active Buzzer | Buzzer (+) Positive (other pin GND) |
+| **5V** | L298N Motor Driver| 5V screw for esp32 power |
+| **Battery +** | power switch -> L298N Motor Driver | 12V screw for motor power |
+| **Battery -** | Shared GND of all devices | Shared GND cable |
+| **Motor R1** | L298N Motor Driver | + to OUT1 - to OUT2 |
+| **Motor R2** | L298N Motor Driver | + to OUT1 - to OUT2 |
+| **Motor L1** | L298N Motor Driver | + to OUT4 - to OUT3 |
+| **Motor L2** | L298N Motor Driver | + to OUT4 - to OUT3 |
 
  
 
