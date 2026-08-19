@@ -74,7 +74,7 @@ Round End & Resetting:
 
   • After a defusal or explosion, press and hold the * key for 4 seconds to reset the prop for the next round.
 
-## why i made it:
+## Why i made it:
 
  • Level Up Airsoft Matches: Standard airsoft games can get repetitive with simple flag-capturing; adding a physical CS2 bomb prop brings intense objective-based gameplay and real time pressure to every round.
 
