@@ -21,6 +21,32 @@ Audio & Visuals:
 
 ## Key Features
 
+CS2 Authentic Gameplay:
+
+ • Uses the iconic 7355608 bomb code for arming and defusal.
+
+Trial-and-Error Defusal:
+
+ • Automatically generates a random secret digit (0-9) on arming. Defusers must enter the code plus the correct extra digit (7355608X) before time runs out.
+
+Exponential Countdown Pinging:
+
+ • Features a custom CS2 audio formula where beep frequency speeds up exponentially as the 45-second timer gets closer to 0.
+
+Anti-Spam Delay:
+
+ • Includes a non-blocking 0.7-second cooldown on wrong guesses (INCORRECT CODE!) to prevent blind button mashing while keeping the live timer visible.
+
+Hardware Noise Filtered:
+
+ • Programmed with keypad debounce protection to prevent ghost keypresses caused by buzzer power draws.
+
+System Soft-Reset:
+
+ • Allows players to hold the * key for 4 seconds at the end of a round to immediately reset the prop for the next match.
+
+ 
+
 
 
 
