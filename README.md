@@ -45,6 +45,39 @@ System Soft-Reset:
 
  • Allows players to hold the * key for 4 seconds at the end of a round to immediately reset the prop for the next match.
 
+ ## How to use:
+
+Arming the Bomb (T Side):
+
+ 1. Power on the device using the toggle switch on the side.
+
+ 2. Enter the arming password 7355608 on the keypad.
+
+ 3. Press # to lock in the code and start the 45-second countdown.
+(Press * at any time before hitting # if you make a mistake and need to clear your input.)
+
+Defusing the Bomb (CT Side):
+
+ 1. Press # on the keypad while the bomb is active to open the defusal prompt.
+
+ 2. Key in the base password 7355608 followed by your guess for the secret 8th digit (0–9).
+
+ 3. The bomb will auto-check as soon as the 8th digit is pressed:
+
+    • If correct: The LCD displays BOMB DEFUSED and plays the CT victory chime.
+
+    • If incorrect: The screen flashes INCORRECT CODE! for 0.7 seconds with an error buzz, then automatically clears your entry so you can guess the next digit.
+
+Round End & Resetting:
+
+  • If the timer hits 0.0s, the bomb detonates, displaying BOOM! alongside explosion sound effects.
+
+  • After a defusal or explosion, press and hold the * key for 4 seconds to reset the prop for the next round.
+
+  
+
+    
+
  
 
 
