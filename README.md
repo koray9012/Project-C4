@@ -126,6 +126,19 @@ The code can be found in repo: Project-C4 code
 | 9V battery Jack| 1 | 0.54 USD | https://elimex.bg/product/77718-f172b-battery-clip-9v-to-dc-plug-2-1x5-5mm |
 | Switch| 1 | 0.36 USD | https://elimex.bg/product/44024-switch-smrs101-1-black |
 
+## Video for C4 Demo ()
+
+## Credits:
+This project uses:
+Kicad
+
+Arduino IDE
+
+Hack Club Macondo
+
+Btw thanks for the pinecil and power supply Hack Club :)
+
+
 
 
 
