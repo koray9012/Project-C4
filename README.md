@@ -134,7 +134,7 @@ Kicad
 
 Arduino IDE
 
-Hack Club Macondo
+Hack Club Forge
 
 Btw thanks for the pinecil and power supply Hack Club :)
 
